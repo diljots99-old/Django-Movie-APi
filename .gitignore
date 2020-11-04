@@ -1,0 +1,9 @@
+/.vscode
+/env
+/__pycache__
+/MediaStreaming/ApiApp/__pycache__
+/MediaStreaming/MediaStreaming/__pycache__
+/keys
+/MediaStreaming/keys
+/MediaStreaming/ApiApp/migrations/__pycache__
+/MediaStreaming/keys
