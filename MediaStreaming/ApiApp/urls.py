@@ -35,7 +35,10 @@ urlpatterns = [
 
 
     path("user/",users.Users.as_view()),
-    path("user/history/",users.Users_History.as_view()),
+
+    path("user/history/<str:pk>",users.Users_History.as_view()),
+    path("user/favourites/<str:pk>",users.Users_Favourites.as_view()),
+    path("user/watchlist/<str:pk>",users.Users_Watchlist.as_view()),
 
     path('file/torrent/<int:torrent_id>',torrent.get_torrent_file.as_view()),
 

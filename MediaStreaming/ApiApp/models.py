@@ -217,6 +217,8 @@ class UserFavourites(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
     type = models.CharField(max_length=100)
     backref_id = models.IntegerField()
+    date_created = models.DateTimeField()
+    last_accessed = models.DateTimeField()
 
     class Meta:
         managed = False
@@ -227,6 +229,8 @@ class UserHistory(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
     type = models.CharField(max_length=100)
     backref_id = models.IntegerField()
+    date_created = models.DateTimeField()
+    last_accessed = models.DateTimeField()
 
     class Meta:
         managed = False
@@ -237,6 +241,8 @@ class UserWatchlist(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
     type = models.CharField(max_length=100)
     backref_id = models.IntegerField()
+    date_created = models.DateTimeField()
+    last_accessed = models.DateTimeField()
 
     class Meta:
         managed = False
