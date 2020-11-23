@@ -1,0 +1,172 @@
+{% extends 'ManagerApp/dashboard_base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% load widget_tweaks %}
+{% block page_content %}
+
+
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Add New Movie to System</h1>
+
+        <a href="{% url 'ManagerApp:add_new_movie' %}"
+            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fa fa-plus fa-sm text-white-50"></i> Add Movie</a>
+    </div>
+
+    <div class="row">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4 w-75 p-3">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Automatically add movie using TMDB </h6>
+            </div>
+            <div class="card-body">
+                <div class="row  justify-content-center">
+
+                    <!-- Topbar Search -->
+                    <div class="col col-12">
+                        <form method="POST" action="" class="d-none d-sm-inline-block form-inline w-75 navbar-search">
+                            {% csrf_token %}
+
+                            <div class="input-group">
+                                <input type="text" class="form-control border-1 " id="search_query" name="search_query"
+                                    placeholder="Search TMDB to Automatically add movie in system" aria-label="Search"
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                {% if search_results.results|length%}
+
+
+                <h5 class="text-start text-capitalize p-3">Show results for {{search_query}}</h5>
+                <hr>
+                <div class="row">
+
+                    {% for movie in search_results.results %}
+                    <div class="col-xl-2 col-md-3 mb-4">
+                        <a href="{% url 'ManagerApp:view_tmdb_result' movie_id=movie.id%}" class="col-md">
+                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 40rem; "
+                                src="{% url 'ApiApp:movie_poster' movie_id=movie.id %}?language=en"
+                                onerror="this.onerror=null; this.src='{% url 'ApiApp:movie_poster' movie_id=movie.id %}'">
+                            <p class="text-center ont-weight-bold">{{ movie.title }}</p>
+                        </a>
+                    </div>
+
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to
+                            {{ search_results.results|length }} of {{search_results.total_results}} entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+
+                        <nav class="align-end" aria-label="Page navigation example">
+                            <ul class="pagination">
+
+
+                                {% if search_results.page == 1 %}
+                                <li class="page-item disabled"><a class="page-link" href="#">First</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+
+                                {% else %}
+                                <li class="page-item">
+                                    <form method="POST" id="page_first"
+                                        action="{% url 'ManagerApp:add_new_movie' %}?page=1&search_query={{search_query}} "
+                                        class="page-link">
+                                        {% csrf_token %}
+                                        <a onclick="document.getElementById('page_first').submit();">First</a>
+                                    </form>
+                                </li>
+                                <li class="page-item">
+                                    <form method="POST" id="page_previous"
+                                        action="{% url 'ManagerApp:add_new_movie' %}?page={{search_results.page|add:'-1' }}&search_query={{search_query}}"
+                                        class="page-link">
+                                        {% csrf_token %}
+                                        <a onclick="document.getElementById('page_previous').submit();">Previous</a>
+                                    </form>
+                                </li>
+                                {% endif %}
+
+                                {% for page_number in page_range%}
+                                <li class="page-item {% if search_results.page == page_number %} active {% endif %}">
+                                    <form id="page_{{page_number}}" method="POST"
+                                        action="{% url 'ManagerApp:add_new_movie' %}?page={{page_number}}&search_query={{search_query}}"
+                                        class="page-link">
+                                        {% csrf_token %}
+                                        <a
+                                            onclick="document.getElementById('page_{{page_number}}').submit();">{{page_number}}</a>
+
+                                    </form>
+                                </li>
+                                {% endfor %}
+
+                                {% if search_results.page == search_results.total_pages %}
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="#">Last</a></li>
+
+                                {% else %}
+                                <li class="page-item">
+                                    <form method="POST" id="page_next"
+                                        action="{% url 'ManagerApp:add_new_movie' %}?page={{search_results.page|add:'1' }}&search_query={{search_query}} "
+                                        class="page-link">
+                                        {% csrf_token %}
+                                        <a onclick="document.getElementById('page_next').submit();">Next</a>
+                                    </form>
+                                </li>
+                                <li class="page-item">
+                                    <form method="POST" id="page_last"
+                                        action="{% url 'ManagerApp:add_new_movie' %}?page={{search_results.total_pages }}&search_query={{search_query}} "
+                                        class="page-link">
+                                        {% csrf_token %}
+                                        <a onclick="document.getElementById('page_last').submit();">Last</a>
+                                    </form>
+                                </li>
+                                {% endif %}
+
+                            </ul>
+                        </nav>
+
+                    </div>
+
+
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+    {% endblock page_content %}

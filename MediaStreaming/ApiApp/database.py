@@ -26,12 +26,13 @@ class Database():
     def get_movie_genres(self,ID):
         try:
             
-            mass = MoviesToGenres.objects.filter(movie_id=ID).values()
+            mass = MoviesToGenres.objects.filter(movie_id=ID).all()
             list_of_genres = []
             list_of_genres_id = []
 
             for value in mass:
-                genre = Genres.objects.get(id=value['genre_id'])
+                # genre = Genres.objects.get(id=value.genre
+                genre = value.genre
                 
                 if  len(list_of_genres_id) <1:
                     list_of_genres_id.append(genre.id)
@@ -46,7 +47,7 @@ class Database():
                 
 
             return list_of_genres
-        except:
+        except Exception as e:
             return []
 
     def get_torrents_from_movie_id(self,ID= None):
@@ -149,3 +150,32 @@ class Database():
                     return None
         else:
                 return None
+
+    def get_google_drive_from_movie_id(self,ID):
+        try:
+            mot = SourceGoogleDrive.objects.filter(backref_id=ID).values()
+            list_of_Drive_Files =  []
+
+            for value in mot.iterator():
+                
+                list_of_Drive_Files.append(value)
+            return list_of_Drive_Files
+            
+          
+        except:
+            return []
+
+    def get_firebase_from_movie_id(self,ID):
+        try:
+            movie = Movies.objects.get(id=ID)
+            mot = FirebaseMovies.objects.filter(movie=movie).all()
+            list_of_Drive_Files =  []
+
+            for value in mot.iterator():
+                
+                list_of_Drive_Files.append(value)
+            return list_of_Drive_Files
+            
+          
+        except:
+            return []

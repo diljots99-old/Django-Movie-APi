@@ -1,0 +1,177 @@
+{% extends 'ManagerApp/dashboard_base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block page_content %}
+
+<!-- Custom styles for this page -->
+<link href="{% static 'ManagerApp/prebuild/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Manage Sources</h1>
+
+
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4 w-75">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Firebase Credentials</h6>
+            </div>
+            <div class="card-body">
+                <div class="row d-inline-flex p-2 w-100">
+
+                    <label>Showing</label>
+                    <form method="POST" action="{% url 'ManagerApp:manage_sources_movies' %}"
+                        id="item_per_page_selector">
+                        {% csrf_token %}
+                        <select name="items_per_page" id="items_per_page"
+                            onchange="document.getElementById('item_per_page_selector').submit();"
+                            class="custom-select custom-select-sm form-control form-control-sm">
+
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="75">75</option>
+                            <option value="100">100</option>
+                        </select>
+                    </form>
+                    <label>entries</label>
+
+
+                    <div>
+                        <a href="{% url 'ManagerApp:add_new_firebase_credentials' %}"
+                            class=" d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fa fa-plus fa-sm text-white-50"></i> Add New Credentials</a>
+                    </div>
+                    <script>
+                        var obj = document.getElementById("items_per_page");
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj.options[i].value === "{{ page_obj.paginator.per_page }}") obj.selectedIndex = i;
+                        }
+                    </script>
+                </div>
+
+                <div class="row ">
+                    <table class="table table-bordered w-75" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>owner_email</th>
+                                <th>type</th>
+                                <th>project_id</th>
+                                <th>client_email</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>owner_email</th>
+                                <th>type</th>
+                                <th>project_id</th>
+                                <th>client_email</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for credentials in page_obj %}
+
+                            <tr>
+                                <td>{{ credentials.id }}</td>
+                                <td>{{ credentials.owner_email }}</td>
+                                <td>{{ credentials.type }}</td>
+                                <td>{{ credentials.project_id }}</td>
+                                <td>{{ credentials.client_email }}</td>
+                                <td><a href=""
+                                        class=" d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
+                                            class="fa fa-trash-o text-white-50"></i> Delete</a></td>
+                                <td><a href=""
+                                        class=" d-none d-sm-inline-block btn btn-sm btn-info shadow-sm"><i
+                                            class="fa fa-pencil-square-o text-white-50"></i> Edit</a></td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="" id="" role="" aria-live="">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of
+                            {{page_obj.paginator.count}} entries
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <nav class="align-end" aria-label="Page navigation example">
+                            <ul class="pagination">
+
+
+                                {% if page_obj.has_previous %}
+                                <li class="page-item "><a class="page-link" href="?page=1">First</a></li>
+                                <li class="page-item "><a class="page-link"
+                                        href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                                {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="">First</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
+                                {% endif %}
+
+
+                                {% for l in  page_obj.paginator.page_range %}
+                                {% if l <= page_obj.number|add:3 and l >= page_obj.number|add:-3 %}
+                                <li class="page-item {% if forloop.counter == page_obj.number%} active {% endif %}"><a
+                                        class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                                {% endif %}
+                                {% endfor %}
+
+
+                                {% if page_obj.has_next %}
+                                <li class="page-item "><a class="page-link"
+                                        href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                <li class="page-item "><a class="page-link"
+                                        href="?page={{ page_obj.paginator.num_pages }}">Last </a></li>
+                                {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="">Next</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="">Last </a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src=" {% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}">
+</script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}">
+</script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+
+{% endblock page_content %}

@@ -133,6 +133,37 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class FirebaseCredentials(models.Model):
+    type = models.TextField()
+    project_id = models.TextField()
+    private_key_id = models.TextField()
+    private_key = models.TextField()
+    client_email = models.TextField()
+    client_id = models.TextField()
+    auth_uri = models.TextField()
+    token_uri = models.TextField()
+    auth_provider_x509_cert_url = models.TextField()
+    client_x509_cert_url = models.TextField()
+    owner_email = models.CharField(max_length=2000)
+
+    class Meta:
+        managed = False
+        db_table = 'firebase__credentials'
+
+
+class FirebaseMovies(models.Model):
+    filename = models.CharField(max_length=200)
+    file_path = models.CharField(max_length=1000)
+    owner_email = models.CharField(max_length=2000)
+    credentials = models.ForeignKey(FirebaseCredentials, models.DO_NOTHING, db_column='credentials')
+    movie = models.ForeignKey('Movies', models.DO_NOTHING)
+    quality = models.CharField(db_column='Quality', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'firebase__movies'
+
+
 class Genres(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100, blank=True, null=True)

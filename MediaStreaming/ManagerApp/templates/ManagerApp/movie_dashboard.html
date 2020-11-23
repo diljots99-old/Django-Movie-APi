@@ -1,0 +1,65 @@
+{% extends 'ManagerApp/dashboard_base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block page_content %}
+
+<!-- Custom styles for this page -->
+<link href="{% static 'ManagerApp/prebuild/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Movies</h1>
+
+        <a href="{% url 'ManagerApp:add_new_movie' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fa fa-plus fa-sm text-white-50"></i> Add Movie</a>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Latest Movies</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    {% for movie in movies %}
+                    <div class="col-xl-2 col-md-3 mb-4">
+                        <a href="{% url 'ManagerApp:movie_details' movie_id=movie.id %}" class="col-md">
+                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 100rem; "
+                            src="{% url 'ApiApp:movie_poster' movie_id=movie.id %}?language=en"  onerror="this.onerror=null; this.src='{% url 'ApiApp:movie_poster' movie_id=movie.id %}'">
+                            <p class="text-center ont-weight-bold">{{ movie.title }}</p>
+                        </a>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+
+{% endblock page_content %}

@@ -35,7 +35,7 @@ class Genres(models.Model):
 class ImagesBackdrops(models.Model):
     backref_id = models.IntegerField(blank=True, null=True)
     image_category = models.CharField(max_length=10)
-    image_data = models.TextField()
+    image_data = models.BinaryField()
     aspect_ratio = models.FloatField(blank=True, null=True)
     heigth = models.FloatField(blank=True, null=True)
     width = models.FloatField(blank=True, null=True)
@@ -49,7 +49,7 @@ class ImagesBackdrops(models.Model):
 class ImagesPosters(models.Model):
     backref_id = models.IntegerField(blank=True, null=True)
     image_category = models.CharField(max_length=10)
-    image_data = models.TextField()
+    image_data = models.BinaryField()
     aspect_ratio = models.FloatField(blank=True, null=True)
     heigth = models.FloatField(blank=True, null=True)
     width = models.FloatField(blank=True, null=True)
@@ -188,7 +188,7 @@ class Torrents(models.Model):
     size = models.CharField(max_length=20, blank=True, null=True)
     magent_url = models.TextField(blank=True, null=True)
     hash = models.TextField(blank=True, null=True)
-    torrent_file = models.BinaryField(blank=True, null=True)
+    torrent_file = models.FileField(blank=True, null=True)
     torrent_source = models.CharField(max_length=20, blank=True, null=True)
     source_id = models.IntegerField(blank=True, null=True)
     size_bytes = models.IntegerField(blank=True, null=True)
@@ -247,3 +247,34 @@ class UserWatchlist(models.Model):
     class Meta:
         managed = False
         db_table = 'user__watchlist'
+
+
+class FirebaseCredentials(models.Model):
+    type = models.TextField()
+    project_id = models.TextField()
+    private_key_id = models.TextField()
+    private_key = models.TextField()
+    client_email = models.TextField()
+    client_id = models.TextField()
+    auth_uri = models.TextField()
+    token_uri = models.TextField()
+    auth_provider_x509_cert_url = models.TextField()
+    client_x509_cert_url = models.TextField()
+    owner_email = models.CharField(max_length=2000)
+
+    class Meta:
+        managed = False
+        db_table = 'firebase__credentials'
+
+
+class FirebaseMovies(models.Model):
+    filename = models.CharField(max_length=200)
+    file_path = models.CharField(max_length=1000)
+    firebase_url = models.CharField(max_length=10000)
+    quality = models.CharField(db_column='Quality', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    credentials = models.ForeignKey(FirebaseCredentials, models.DO_NOTHING, db_column='credentials')
+    movie = models.ForeignKey('Movies', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'firebase__movies'

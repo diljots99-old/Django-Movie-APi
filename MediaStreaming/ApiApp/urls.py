@@ -27,7 +27,7 @@ urlpatterns = [
     path('movie/poster_urls/<int:movie_id>', movies.get_movie_poster_urls.as_view()),
     path('movie/backdrop/<int:movie_id>', movies.get_movie_backdrop.as_view(),name="movie_backdrop"),
     path('movie/backdrop_urls/<int:movie_id>', movies.get_movie_backdrop_urls.as_view()),
-    path('movie/details/<int:movie_id>', movies.get_complete_movie_details.as_view()),
+    path('movie/details/<int:movie_id>', movies.get_complete_movie_details.as_view(),name='movie_details'),
     path('movie/credits/<int:movie_id>', movies.movie_credits.as_view()),
     path('movie/similar/<int:movie_id>', movies.similar_movies.as_view()),
 
@@ -35,6 +35,7 @@ urlpatterns = [
 
 
     path("user/",users.Users.as_view()),
+    path("user/verify/",users.updateVerifiedUser.as_view()),
 
     path("user/history/<str:pk>",users.Users_History.as_view()),
     path("user/favourites/<str:pk>",users.Users_Favourites.as_view()),

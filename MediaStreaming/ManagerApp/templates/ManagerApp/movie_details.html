@@ -1,0 +1,55 @@
+{% extends 'ManagerApp/dashboard_base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block page_content %}
+
+<!-- Basic Card Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">{{movie.original_title}} </h6>
+    </div>
+    <div class="card-body">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">{{movie.title}}</h1>
+            <div class="float-right">
+                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fa fa-pencil-square-o text-white-50"></i> Edit Movie</a>
+
+                <a href="{% url 'ManagerApp:upload_media_firebase' media_id=movie.id %}?type=movie" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fa fa-upload text-white-50"></i> Upload Media</a>
+            </div>
+        </div>
+
+
+        <div class="float-right">
+            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4 " style="width: 20rem; "
+                src="{% url 'ApiApp:movie_poster' movie_id=movie.id %}" alt="">
+        </div>
+
+        {% for key,values in movie.items %}
+        <div class="row">
+            <div class="col col-lg-2">
+                <h5 class="text-capitalize text-left font-weight-bold">{{key}} :</h5>
+            </div>
+            <div class="col ">
+                <h5 class="text-left">{{values}}</h5>
+            </div>
+
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+</div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+{% endblock page_content %}

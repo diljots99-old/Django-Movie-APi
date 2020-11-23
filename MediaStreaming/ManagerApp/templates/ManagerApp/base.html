@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://kit.fontawesome.com/2cf6a2c190.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <title>
+        {% block title %}
+        {{ page_title|default:"Untitled Page" }}
+        {% endblock title %}
+    </title>
+</head>
+
+<body>
+    {% load static %}
+
+    {% block content %}
+
+    <p>Placeholder text in base template. Replace with page content.</p>
+
+    {% endblock content %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+</body>
+
+</html>

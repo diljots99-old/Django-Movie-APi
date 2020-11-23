@@ -25,9 +25,13 @@ class get_torrent_file(APIView):
                 torrent = MyDB.get_torrent_by_id(torrent_id)
                 # response = FileResponse(torrent.get("torrent_file"),as_attachment=True, filename=f'{torrent_id}.torrent',content_type="application/x-bittorrent")
                 torrent_file = torrent.get("torrent_file")
-                response = FileResponse(io.BytesIO(torrent_file),content_type="application/x-bittorrent")
+                # response = FileResponse(io.BytesIO(torrent_file),content_type="application/x-bittorrent")
+                response = FileResponse((torrent_file),content_type="application/x-bittorrent")
+                response =  HttpResponse(io.BytesIO(torrent_file),content_type='application/x-bittorrent')
+                
                 response['Content-Disposition'] = f'attachment; filename="{torrent_id}.torrent"'
-                return response
+                return     response           
+
 
             except Exception as e: 
                 return Response({ "message":"Exception Occured error",

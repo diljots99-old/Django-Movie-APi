@@ -1,0 +1,60 @@
+{% extends 'ManagerApp/dashboard_base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% load widget_tweaks %}
+
+
+{% block page_content %}
+<!-- Basic Card Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Upload Media</h6>
+    </div>
+    <div class="card-body">
+        {% if form.errors%}
+        {{ form.errors}}
+
+        {% if form.errors %}
+        {% for error in form.errors %}
+
+        <div class="alert alert-{{ error.tags }} w-75" role="alert">{{ error }} </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <!-- <input type="email" class="form-control form-control-user"
+                id="exampleInputEmail" aria-describedby="emailHelp"
+                placeholder="Enter Email Address..."> -->
+
+                <!-- <input type="text" name="username" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Username or Email" required=""> -->
+                <span class="font-weight-bold text-dark">{{field.label}}</span>
+                {% render_field field autocomplete="on" class+="form-control form-control-user text-dark" %}
+            </div>
+            {% endfor %}
+
+
+            <input type="submit" value="Submit" class="btn btn-primary btn-user btn-block">
+        </form>
+
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'ManagerApp/prebuild/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'ManagerApp/prebuild/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'ManagerApp/prebuild/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'ManagerApp/prebuild/js/sb-admin-2.min.js' %}"></script>
+
+{% endblock page_content %}

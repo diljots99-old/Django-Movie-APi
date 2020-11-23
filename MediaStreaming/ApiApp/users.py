@@ -26,8 +26,116 @@ from django.forms.models import model_to_dict
 import requests
 
 
+
+class updateVerifiedUser(APIView):
+    permission_classes  = [rest_framework.permissions.AllowAny]
+    def get(self,request,format=None):
+        try:
+            
+            token = request.GET.get("token",None)
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token['uid']
+            user = auth.get_user(uid)
+            
+            dbUser = dbUsers.objects.filter(uid=uid)
+
+            for  dbuser in dbUser:
+
+                auth.update_user(
+                    uid,
+                    email=user.email,
+                    email_verified=True
+                )
+                return HttpResponse(f"{user.email} Verifed Succesfully")
+
+
+        except firebase_admin._auth_utils.InvalidIdTokenError as e:
+
+            result = {
+                "status":False,
+                "msg":e.default_message,
+                "Expection Class Name":str(e.__class__.__name__),
+                "Expection Class ":str(e.__class__)
+
+            }
+            return Response(result)
+    
+
+
 class Users(APIView):
     permission_classes  = [rest_framework.permissions.AllowAny]
+
+    def get(self,request,format=None):
+        try:
+            
+            token = request.GET.get("token",None)
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token['uid']
+            user = auth.get_user(uid)
+
+            dbUser = dbUsers.objects.filter(uid=uid)
+            
+            profilePicture = None
+            if user.photo_url:
+                r = requests.get(user.photo_url)
+                if r.status_code == 200:
+                    profilePicture = r.content
+
+            for  dbuser in dbUser:
+                dbuser.name=user.display_name
+                dbuser.email=user.email
+                dbuser.full_phone_number=user.phone_number
+                dbuser.profile_picture=profilePicture
+                dbuser.save()
+                return Response(model_to_dict(dbuser))
+
+        except firebase_admin._auth_utils.InvalidIdTokenError as e:
+
+            result = {
+                "status":False,
+                "msg":e.default_message,
+                "Expection Class Name":str(e.__class__.__name__),
+                "Expection Class ":str(e.__class__)
+
+            }
+            return Response(result)
+
+    def put(self,request,format=None):
+        try:
+            
+            token = request.GET.get("token",None)
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token['uid']
+            user = auth.get_user(uid)
+            
+            dbUser = dbUsers.objects.filter(uid=uid)
+            
+       
+            profilePicture = None
+            if user.photo_url:
+                r = requests.get(user.photo_url)
+                if r.status_code == 200:
+                    profilePicture = r.content
+            
+            for  dbuser in dbUser:
+                dbuser.name=user.display_name
+                dbuser.email=user.email
+                dbuser.full_phone_number=user.phone_number
+                dbuser.profile_picture=profilePicture
+                dbuser.save()
+                return Response(model_to_dict(dbuser))
+
+        except firebase_admin._auth_utils.InvalidIdTokenError as e:
+
+            result = {
+                "status":False,
+                "msg":e.default_message,
+                "Expection Class Name":str(e.__class__.__name__),
+                "Expection Class ":str(e.__class__)
+
+            }
+            return Response(result)
+
     def post(self,request,format=None):
         try:
             
@@ -74,7 +182,21 @@ class Users_History(APIView):
 
                 user_history = []
                 for history in user_history_query_set.iterator():
-                    user_history.append(model_to_dict(history))
+                    
+                    historyJSON = model_to_dict(history)
+
+                    if historyJSON.get("type") == "movie":
+                        historyJSON["data"] = {}
+
+                        try:
+                            movie = Movies.objects.get(id=historyJSON.get("backref_id"))
+
+                            if not movie is None:
+                                historyJSON["data"] = model_to_dict(movie)
+
+                        except :
+                            pass
+                    user_history.append(historyJSON)
 
                 return Response(user_history)
 
