@@ -18,6 +18,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 app_name = 'ApiApp'
 
 urlpatterns = [
+    path('', views.ApiHome.as_view()),
     path('movie/now_playing/', movies.get_now_playing_movies.as_view()),
     path('movie/top_rated/', movies.get_top_rated_movies.as_view()),
     path('movie/popular/', movies.get_popular_movies.as_view()),
