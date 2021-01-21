@@ -57,6 +57,7 @@ class Database():
             
             for value in mot.iterator():
                 torrent = Torrents.objects.get(id=value['torrent_id'])
+            
                 list_of_torrents.append(model_to_dict(torrent))
             return list_of_torrents
         else:

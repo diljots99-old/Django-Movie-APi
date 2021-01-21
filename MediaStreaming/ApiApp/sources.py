@@ -11,7 +11,15 @@ class MovieSources():
     def get_torrets(self,movie_id):
 
         listOfTosrrent =  Database().get_torrents_from_movie_id(movie_id)
-        return listOfTosrrent
+
+        torrentList = []
+        for torrent in listOfTosrrent:
+            try:
+                torrent.pop("torrent_file",None)
+            except:
+                pass
+            torrentList.append(torrent)
+        return torrentList
 
     def get_google_drive(self,movie_id):
 

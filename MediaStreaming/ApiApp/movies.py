@@ -379,7 +379,6 @@ class get_movie_backdrop_urls(APIView):
                 listOfUrls = []
                 for i in range(0,number_of_backdrops):
                     path  = reverse('ApiApp:movie_backdrop',args=[movie_id])
-
                     url =f"http://{SERVER_NAME}{path}?backdrop_index={i}"
                     listOfUrls.append(url)
 
